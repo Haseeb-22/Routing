@@ -1,97 +1,110 @@
-import { AppBar, Button, IconButton, Tooltip, Typography } from '@mui/material'
-import { Container, fontSize } from '@mui/system'
-// import HomeIcon from '@mui/icons-material/Home';
-import React from 'react'
-import { BrowserRouter as Router, Link, Route, Routes, } from 'react-router-dom'
-import Home from '../Pages/Home'
-import Services from '../Pages/Services'
-import Contact from '../Pages/Contact'
-import About from '../Pages/About'
-import Moreinfo from '../Pages/Moreinfo'
-function Navbar() {
-    return (
-        <div>
-            <Router>
-                <AppBar sx={{ backgroundColor: "crimson", padding: "15px" }} component="nav">
-                    <Container maxWidth="xl" sx={{ display: "flex", justifyContent: "space-evenly", alignItems: "center" }}>
+import * as React from 'react';
+import PropTypes from 'prop-types';
+import AppBar from '@mui/material/AppBar';
+import Box from '@mui/material/Box';
+import Divider from '@mui/material/Divider';
+import Drawer from '@mui/material/Drawer';
+import IconButton from '@mui/material/IconButton';
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import ListItemButton from '@mui/material/ListItemButton';
+import MenuIcon from '@mui/icons-material/Menu';
+import Toolbar from '@mui/material/Toolbar';
+import Typography from '@mui/material/Typography';
+import Button from '@mui/material/Button';
+import {Link} from 'react-router-dom';
 
-                        <Typography variant='h5' align='left' >
-                            ROUTING 
-                        </Typography>
+const drawerWidth = 240;
+const navItems = ['About', 'Services', 'Contact','Dashboard'];
 
+function DrawerAppBar(props) {
+  const { window } = props;
+  const [mobileOpen, setMobileOpen] = React.useState(false);
 
-                        <Link to="/" className='hi'>
-                            <Typography >
-                                <Tooltip title="Home" sx={{ padding: "0px" }}>
-                                    <Button variant='text' color='inherit' sx={{ fontSize: "17px" }}>Home</Button>
-                                    {/* <IconButton color='inherit' sx={{ padding: "0px", fontSize:"17px" }}>
-                                Home
-                            </IconButton> */}
-                                </Tooltip>
-                            </Typography>
-                        </Link>
+  const handleDrawerToggle = () => {
+    setMobileOpen(!mobileOpen);
+  };
 
+  const drawer = (
+    <Box onClick={handleDrawerToggle} sx={{ textAlign: 'center' }}>
+      <Typography variant="h6" sx={{ my: 2 }}>
+      <Link to={'/'} className='Nav-Links'> My Dashboard Website</Link>
+      </Typography>
+      <Divider />
+      <List>
+        {navItems.map((item) => (
+          <ListItem key={item} disablePadding>
+            <ListItemButton sx={{ textAlign: 'center' }}>
+            <Link className='Nav-Links' to={`/${item}`}>{item} </Link>
+            </ListItemButton>
+          </ListItem>
+        ))}
+      </List>
+    </Box>
+  );
 
-                        <Link to="services" className='hi'>
-                            <Typography>
-                                <Tooltip title="Services" sx={{ padding: "0px" }}>
-                                    {/* <IconButton color='inherit' sx={{ padding: "0px", fontSize:"17px" }}>
-                                Services
-                            </IconButton> */}
-                                    <Button variant='text' color='inherit' sx={{ fontSize: "17px" }}>Services</Button>
-                                </Tooltip>
-                            </Typography>
-                        </Link>
+  const container = window !== undefined ? () => window().document.body : undefined;
 
-                        <Link to="about" className='hi'>
-                            <Typography>
-                                <Tooltip title="About" sx={{ padding: "0px" }}>
-                                    {/* <IconButton color='inherit' sx={{ padding: "0px", fontSize:"17px" }}>
-                                About
-                            </IconButton> */}
-                                    <Button variant='text' color='inherit' sx={{ fontSize: "17px" }}>About</Button>
-
-                                </Tooltip>
-                            </Typography>
-                        </Link>
-
-                        <Link to="contact" className='hi'>
-                            <Typography >
-                                <Tooltip title="Contact" sx={{ padding: "0px" }}>
-                                    {/* <IconButton color='inherit' sx={{ padding: "0px", fontSize: "17px" }}>
-                                Contact
-                                <HomeIcon fontSize='large' sx={{ padding: "0px" }} />
-                            </IconButton> */}
-                                    <Button variant='text' color='inherit' sx={{ fontSize: "17px" }}>Contact</Button>
-
-                                </Tooltip>
-                            </Typography>
-                        </Link>
-
-                        <Link to="moreinfo" className='hi'>
-                            <Typography >
-                                <Tooltip title="Contact" sx={{ padding: "0px" }}>
-                                    {/* <IconButton color='inherit' sx={{ padding: "0px", fontSize: "17px" }}>
-                                Contact
-                                <HomeIcon fontSize='large' sx={{ padding: "0px" }} />
-                            </IconButton> */}
-                                    <Button variant='text' color='inherit' sx={{ fontSize: "17px" }}>Moreinfo</Button>
-
-                                </Tooltip>
-                            </Typography>
-                        </Link>
-                    </Container>
-                </AppBar>
-                <Routes>
-                    <Route path='/' element={<Home />} />
-                    <Route path='services' element={<Services />} />
-                    <Route path='contact' element={<Contact />} />
-                    <Route path='about' element={<About />} />
-                    <Route path='moreinfo' element={<Moreinfo/>} />
-                </Routes>
-            </Router>
-        </div>
-    )
+  return (
+    <Box sx={{ display: 'flex' }}>
+      <AppBar component="nav">
+        <Toolbar>
+          <IconButton
+            color="inherit"
+            aria-label="open drawer"
+            edge="start"
+            onClick={handleDrawerToggle}
+            sx={{ mr: 2, display: { sm: 'none' } }}
+          >
+            <MenuIcon />
+          </IconButton>
+          <Typography
+            variant="h6"
+            component="div"
+            sx={{ flexGrow: 1, display: { xs: 'none', sm: 'block' } }}
+          >
+           <Link to={'/'} className='Nav-Link'> My Dashboard Website</Link>
+          </Typography>
+          <Box sx={{ display: { xs: 'none', sm: 'block' } }}>
+            {navItems.map((item) => (
+              <Button key={item} sx={{ color: '#fff' }}>
+                <Link className='Nav-Link' to={`/${item}`} >{item}</Link>
+              </Button>
+            ))}
+          </Box>
+        </Toolbar>
+      </AppBar>
+      <Box component="nav">
+        <Drawer
+          container={container}
+          variant="temporary"
+          open={mobileOpen}
+          onClose={handleDrawerToggle}
+          ModalProps={{
+            keepMounted: true, // Better open performance on mobile.
+          }}
+          sx={{
+            display: { xs: 'block', sm: 'none' },
+            '& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerWidth },
+          }}
+        >
+          {drawer}
+        </Drawer>
+      </Box>
+      <Box component="main" sx={{ p: 3 }}>
+        <Toolbar />
+       
+      </Box>
+    </Box>
+  );
 }
 
-export default Navbar
+DrawerAppBar.propTypes = {
+  /**
+   * Injected by the documentation to work in an iframe.
+   * You won't need it on your project.
+   */
+  window: PropTypes.func,
+};
+
+export default DrawerAppBar;
